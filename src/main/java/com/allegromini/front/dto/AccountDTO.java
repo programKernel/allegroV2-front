@@ -1,12 +1,12 @@
 package com.allegromini.front.dto;
 
-public class RegisterDTO {
+public class AccountDTO {
     private String email = "";
     private String password = "";
     private String repeatPassword = "";
     private boolean tos;
 
-    public RegisterDTO(String email, String password, String repeatPassword, boolean tos) {
+    public AccountDTO(String email, String password, String repeatPassword, boolean tos) {
         this.email = email;
         this.password = password;
         this.repeatPassword = repeatPassword;

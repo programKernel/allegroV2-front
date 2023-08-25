@@ -1,21 +1,28 @@
 package com.allegromini.front.service;
 
-import com.allegromini.front.dto.RegisterDTO;
+import com.allegromini.front.dto.AccountDTO;
 import com.allegromini.front.exception.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class AuthorizationService {
 
-    public void registerAccount(RegisterDTO registerDTO) {
-        if (!registerDTO.getRepeatPassword().equals(registerDTO.getPassword())) {
+    private RestTemplate restTemplate;
+
+    public AuthorizationService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    public void registerAccount(AccountDTO accountDTO) {
+        if (!accountDTO.getRepeatPassword().equals(accountDTO.getPassword())) {
             throw new AuthorizationServiceException("The passwords need to be the same.");
         }
-        if (!registerDTO.isTos()) {
+        if (!accountDTO.isTos()) {
             throw new AuthorizationServiceException("You need to accept the Terms Of Service.");
         }
-        System.out.println("Connecting with back...");
-        //todo connect with backend
+        //todo uniemozliwic wpisanie takiego samego maila jak na innym koncie
+        restTemplate.postForEntity("http://localhost:8080/api/v1/accounts", accountDTO, String.class);
     }
 
     /*public void loginAccount(LoginRequest loginRequest) {
