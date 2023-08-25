@@ -1,0 +1,75 @@
+* {
+    margin: auto;
+}
+body {
+    background-color: #de6d00;
+    font-family: Verdana;
+}
+h1 {
+    color: white;
+    margin: 0 auto;
+    width: 950px;
+    padding: 20px 25px;
+    background-color: orange;
+}
+h2 {
+    color: white;
+    margin: 0 auto;
+    width: 950px;
+    padding: 20px 25px;
+    background-color: orange;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    background-color: #d6d6d6;
+    padding: 5px 10px;
+}
+.auction {
+    background-color: #d6d6d6;
+    padding: 15px 25px;
+}
+.row {
+    display: table-row;
+    width: auto;
+    clear: both;
+}
+.column {
+    font-size: xx-large;
+    float: left;
+    display: table-column;
+}
+.title {
+    font-weight: bold;
+    padding-right: 12px;
+}
+.description {
+    padding-top: 12px;
+}
+.price {
+    font-size: 12px;
+}
+.auction img {
+    max-width: 650px;
+}
+#width-auto {
+    width: auto;
+}
+.links-left {
+    text-align: left;
+    margin: 0;
+}
+.links-right {
+    text-align: right;
+    margin: 0;
+}
+.mainBlock, .links-block {
+    margin: 0 auto;
+    width: 950px;
+    padding: 20px 25px;
+    background-color: #f1f1f1;
+}
+.links-block {
+    justify-content: space-between;
+    display: flex;
+}

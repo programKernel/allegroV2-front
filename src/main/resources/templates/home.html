@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>MyAllegro</title>
+</head>
+<body>
+<h1>Allegro</h1>
+<label th:text="${auctionAddedMessage}"></label>
+    <div class="links-block">
+        <div class="links-left">
+            <a href="/authorization">Log in or Register</a>
+            <a href="/auctionmaker">Create Auction</a>
+            <a href="/all-auctions">Auctions</a>
+        </div>
+        <div id="width-auto"></div>
+        <div class="links-right">
+            <a href="/logout">Log out</a>
+        </div>
+    </div>
+</body>
+</html>
