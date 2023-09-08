@@ -26,11 +26,12 @@ public class AuthorizationController {
     public String postRegister(String email, String password, String repeatPassword, boolean tos, Model model) {
         try {
             authorizationService.registerAccount(new AccountDTO(email, password, repeatPassword, tos));
-            return "home";
-        } catch(AuthorizationServiceException | HttpClientErrorException e) {
+        } catch (AuthorizationServiceException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "home";
+        } catch (HttpClientErrorException e) {
+            model.addAttribute("errorMessage", e.getResponseBodyAsString());
         }
+        return "home";
     }
 
     /*@PostMapping("/login")
