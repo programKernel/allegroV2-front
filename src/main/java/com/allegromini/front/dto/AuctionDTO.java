@@ -1,10 +1,12 @@
 package com.allegromini.front.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
 @Builder
+@Getter
 public class AuctionDTO {
     private int id;
     private String name = "";
@@ -14,26 +16,4 @@ public class AuctionDTO {
     private byte[] image;
     private String imageName = "";
     private String imageType = "";
-
-
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
 }

@@ -1,9 +1,11 @@
 package com.allegromini.front.service;
 
 import com.allegromini.front.dto.AuctionDTO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class AuctionService {
     public void addNewAuction(AuctionDTO auctionDTO) {
         //todo connect to backend
