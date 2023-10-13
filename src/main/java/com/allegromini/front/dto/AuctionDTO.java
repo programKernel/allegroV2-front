@@ -13,7 +13,6 @@ public class AuctionDTO {
     private BigDecimal price;
     private String description = "";
     private String ownerEmail = "";
-    private byte[] image;
     private String imageName = "";
     private String imageType = "";
 }

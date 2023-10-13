@@ -21,13 +21,12 @@ public class AuthorizationService {
         if (!accountDTO.isTos()) {
             throw new AuthorizationServiceException("You need to accept the Terms Of Service.");
         }
-        //todo uniemozliwic wpisanie takiego samego maila jak na innym koncie
         restTemplate.postForEntity("http://localhost:8080/api/v1/accounts", accountDTO, String.class);
     }
 
     /*public void loginAccount(LoginRequest loginRequest) {
         Optional<Account> optionalAccount = accountRepository.findById(loginRequest.getEmail());
-        if (optionalAccount.isEmpty() || !optionalAccount.get().getPassword().equals(loginRequest.getPassword())) { //todo dodać hashowanie hasła
+        if (optionalAccount.isEmpty() || !optionalAccount.get().getPassword().equals(loginRequest.getPassword())) {
             throw new AuthorizationServiceException("The email/password is incorrect.");
         }
         System.out.println("Logging in.");

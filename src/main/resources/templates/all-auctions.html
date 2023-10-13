@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Auctions</title>
+</head>
+<body>
+    <div class="mainBlock">
+        <div class="auction" th:each="auction:${auctions}">
+            <div class="row">
+                <div class="column title">
+                    <a th:href="${'/auction/'+auction.id}" th:text="${auction.name}"></a>
+                </div>
+                <div class="column" th:text="${#numbers.formatCurrency(auction.price)}">
+
+                </div>
+            </div>
+            <div class="description" th:text="${auction.description}">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

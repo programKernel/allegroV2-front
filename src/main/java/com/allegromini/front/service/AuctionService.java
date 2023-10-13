@@ -1,14 +1,46 @@
 package com.allegromini.front.service;
 
 import com.allegromini.front.dto.AuctionDTO;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.ByteArrayResource;
 
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Service
 public class AuctionService {
-    public void addNewAuction(AuctionDTO auctionDTO) {
-        //todo connect to backend
+
+    private RestTemplate restTemplate;
+
+    public AuctionService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+    public void addNewAuction(AuctionDTO newAuctionDTO, byte[] bytes) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("auctionDTO", newAuctionDTO);
+        ByteArrayResource fileResource = new ByteArrayResource(bytes) {
+            @Override
+            public String getFilename() {
+                return "exampleFileName.jpg"; // Ustaw nazwę pliku
+            }
+        };
+        body.add("image", fileResource);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        restTemplate.postForEntity("http://localhost:8080/api/v1/auctions", requestEntity, String.class);
     }
 
     public List<AuctionDTO> getAuctionResponseList() {

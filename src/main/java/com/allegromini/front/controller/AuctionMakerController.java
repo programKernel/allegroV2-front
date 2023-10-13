@@ -29,16 +29,17 @@ public class AuctionMakerController {
     public String postCreateAuction(String ownerEmail, String name, BigDecimal price, String description, Model model,
                                     @RequestParam("image") MultipartFile file) {
         try {
-            String[] filenameSplit = file.getContentType().split("/");
+            String fileType = file.getContentType();
+            String[] nameAndType = fileType.split("/");
             AuctionDTO auctionDTO = AuctionDTO.builder()
                     .ownerEmail(ownerEmail)
                     .name(name)
                     .price(price)
                     .description(description)
-                    .image(file.getBytes())
-                    .imageType("." + filenameSplit[filenameSplit.length - 1])
+                    .imageName(nameAndType[0])
+                    .imageType(nameAndType[1])
                     .build();
-            auctionService.addNewAuction(auctionDTO);
+            auctionService.addNewAuction(auctionDTO, file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
             return "auction-error";
