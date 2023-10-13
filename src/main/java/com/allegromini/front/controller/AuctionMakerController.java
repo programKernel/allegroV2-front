@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -40,11 +41,13 @@ public class AuctionMakerController {
                     .imageType(nameAndType[1])
                     .build();
             auctionService.addNewAuction(auctionDTO, file.getBytes());
+            model.addAttribute("auctionAddedMessage", "The auction has been added.");
         } catch (IOException e) {
             e.printStackTrace();
-            return "auction-error";
+            model.addAttribute("errorMessage", e.getMessage());
+        } catch (HttpClientErrorException e) {
+            model.addAttribute("errorMessage", e.getResponseBodyAsString());
         }
-        model.addAttribute("auctionAddedMessage", "The auction has been added.");
         return "home";
     }
 }
