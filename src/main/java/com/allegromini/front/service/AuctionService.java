@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +45,8 @@ public class AuctionService {
     }
 
     public List<AuctionDTO> getAuctionResponseList() {
-        return null;
+        List<AuctionDTO> auctions = restTemplate.getForObject("http://localhost:8080/api/v1/auctions", List.class);
+        return auctions;
     }
 
     public AuctionDTO findAuctionById(int id) {

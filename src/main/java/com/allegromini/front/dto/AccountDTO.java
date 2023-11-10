@@ -28,4 +28,14 @@ public class AccountDTO {
     public boolean isTos() {
         return tos;
     }
+
+    @Override
+    public String toString() {
+        return "AccountDTO{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", repeatPassword='" + repeatPassword + '\'' +
+                ", tos=" + tos +
+                '}';
+    }
 }
