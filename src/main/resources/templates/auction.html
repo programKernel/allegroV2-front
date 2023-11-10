@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/style.css}">
+  <title>Auctions</title>
+</head>
+  <body>
+    <div class="mainBlock">
+      <div class="auction">
+        <img class="image" th:src="${auction.imageURL}">
+        <div class="title" th:text="${auction.name}">
+
+        </div>
+        <div class="price" th:text="${#numbers.formatCurrency(auction.price)}">
+
+        </div>
+        <div class="description" th:text="${auction.description}">
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

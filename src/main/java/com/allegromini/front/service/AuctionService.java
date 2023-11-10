@@ -50,6 +50,6 @@ public class AuctionService {
     }
 
     public AuctionDTO findAuctionById(int id) {
-        return null;
+        return restTemplate.getForObject("http://localhost:8080/api/v1/auctions/" + id, AuctionDTO.class);
     }
 }
