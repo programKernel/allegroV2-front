@@ -2,6 +2,8 @@ package com.allegromini.front.service;
 
 import com.allegromini.front.dto.AccountDTO;
 import com.allegromini.front.exception.AuthorizationServiceException;
+import com.allegromini.front.session.CurrentUser;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -9,6 +11,9 @@ import org.springframework.web.client.RestTemplate;
 public class AuthorizationService {
 
     private RestTemplate restTemplate;
+    @Resource(name = "currentUserSession")
+    private CurrentUser currentUser;
+
 
     public AuthorizationService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -24,11 +29,12 @@ public class AuthorizationService {
         restTemplate.postForEntity("http://localhost:8080/api/v1/accounts", accountDTO, String.class);
     }
 
-    /*public void loginAccount(LoginRequest loginRequest) {
-        Optional<Account> optionalAccount = accountRepository.findById(loginRequest.getEmail());
-        if (optionalAccount.isEmpty() || !optionalAccount.get().getPassword().equals(loginRequest.getPassword())) {
-            throw new AuthorizationServiceException("The email/password is incorrect.");
-        }
-        System.out.println("Logging in.");
-    }*/
+    public void loginAccount(AccountDTO accountDTO) {
+        currentUser.setLogin(accountDTO.getEmail());
+        currentUser.setPassword(accountDTO.getPassword());
+    }
+
+    public CurrentUser getCurrentUser() {
+        return currentUser;
+    }
 }

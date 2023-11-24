@@ -34,14 +34,14 @@ public class AuthorizationController {
         return "home";
     }
 
-    /*@PostMapping("/login")
+    @PostMapping("/login")
     public String postLogin(String email, String password, Model model) {
         try {
-            authorizationService.loginAccount(new LoginRequest(email, password));
+            authorizationService.loginAccount(new AccountDTO(email, password));
             return "home";
         } catch (AuthorizationServiceException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
-    }*/
+    }
 }

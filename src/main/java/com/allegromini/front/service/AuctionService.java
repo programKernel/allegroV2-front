@@ -22,11 +22,13 @@ import java.util.List;
 
 @Service
 public class AuctionService {
+    private AuthorizationService authorizationService;
 
     private RestTemplate restTemplate;
 
-    public AuctionService(RestTemplate restTemplate) {
+    public AuctionService(RestTemplate restTemplate, AuthorizationService authorizationService) {
         this.restTemplate = restTemplate;
+        this.authorizationService = authorizationService;
     }
     public void addNewAuction(AuctionDTO newAuctionDTO, byte[] bytes) {
         HttpHeaders headers = new HttpHeaders();
@@ -45,6 +47,7 @@ public class AuctionService {
     }
 
     public List<AuctionDTO> getAuctionResponseList() {
+        System.out.println("CURRENT USER: " + authorizationService.getCurrentUser()); //todo nalezy to dostarczyc do backendu
         List<AuctionDTO> auctions = restTemplate.getForObject("http://localhost:8080/api/v1/auctions", List.class);
         return auctions;
     }
