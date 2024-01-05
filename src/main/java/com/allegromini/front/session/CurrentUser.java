@@ -1,8 +1,8 @@
 package com.allegromini.front.session;
 
 public class CurrentUser {
-    private String login = "";
-    private String password = "";
+    private String login = "jjjj@gmail.com";
+    private String password = "jjjj";
 
     public void setLogin(String newLogin) {
         login = newLogin;
