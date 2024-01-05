@@ -31,6 +31,7 @@ public class AuctionService {
         this.authorizationService = authorizationService;
     }
     public void addNewAuction(AuctionDTO newAuctionDTO, byte[] bytes) {
+        newAuctionDTO.setOwnerEmail(authorizationService.getCurrentUser().getLogin());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
@@ -61,6 +62,16 @@ public class AuctionService {
     }
 
     public AuctionDTO findAuctionById(int id) {
-        return restTemplate.getForObject("http://localhost:8080/api/v1/auctions/" + id, AuctionDTO.class);
+        HttpHeaders headers = new HttpHeaders();
+        String credentials = authorizationService.getCurrentUser().getLogin() + ":" + authorizationService.getCurrentUser().getPassword();
+        headers.add("Authorization","Basic " + Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8)));
+        HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<AuctionDTO> auctions = restTemplate.execute(
+                "http://localhost:8080/api/v1/auctions/" + id,
+                HttpMethod.GET,
+                restTemplate.httpEntityCallback(httpEntity),
+                restTemplate.responseEntityExtractor(AuctionDTO.class),
+                AuctionDTO.class);
+        return auctions.getBody();
     }
 }

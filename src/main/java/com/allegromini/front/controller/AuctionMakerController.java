@@ -27,13 +27,12 @@ public class AuctionMakerController {
     }
 
     @PostMapping("/createauction")
-    public String postCreateAuction(String ownerEmail, String name, BigDecimal price, String description, Model model,
+    public String postCreateAuction(String name, BigDecimal price, String description, Model model,
                                     @RequestParam("image") MultipartFile file) {
         try {
             String fileType = file.getContentType();
             String[] nameAndType = fileType.split("/");
             AuctionDTO auctionDTO = AuctionDTO.builder()
-                    .ownerEmail(ownerEmail)
                     .name(name)
                     .price(price)
                     .description(description)

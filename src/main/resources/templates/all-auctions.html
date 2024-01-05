@@ -13,11 +13,9 @@
                     <a th:href="${'/auction/'+auction.id}" th:text="${auction.name}"></a>
                 </div>
                 <div class="column" th:text="${#numbers.formatCurrency(auction.price)}">
-
                 </div>
             </div>
             <div class="description" th:text="${auction.description}">
-
             </div>
         </div>
     </div>

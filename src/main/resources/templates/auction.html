@@ -9,15 +9,9 @@
     <div class="mainBlock">
       <div class="auction">
         <img class="image" th:src="${auction.imageURL}">
-        <div class="title" th:text="${auction.name}">
-
-        </div>
-        <div class="price" th:text="${#numbers.formatCurrency(auction.price)}">
-
-        </div>
-        <div class="description" th:text="${auction.description}">
-
-        </div>
+        <div class="title" th:text="${auction.name}"></div>
+        <div class="price" th:text="${#numbers.formatCurrency(auction.price)}"></div>
+        <div class="description" th:text="${auction.description}"></div>
       </div>
     </div>
   </body>
