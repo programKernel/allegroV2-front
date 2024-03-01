@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Controller
 public class AuctionsController {
@@ -16,13 +17,21 @@ public class AuctionsController {
 
     @GetMapping("/all-auctions")
     public String getAuctionMaker(Model model) {
-        model.addAttribute("auctions", auctionService.getAuctionResponseList());
+        try {
+            model.addAttribute("auctions", auctionService.getAuctionResponseList());
+        } catch (HttpClientErrorException e) {
+            model.addAttribute("errorMessage", e.getResponseBodyAsString());
+        }
         return "all-auctions";
     }
 
     @GetMapping("/auction/{id}")
     public String getAuction(Model model,@PathVariable int id) {
-        model.addAttribute("auction", auctionService.findAuctionById(id));
+        try {
+            model.addAttribute("auction", auctionService.findAuctionById(id));
+        } catch (HttpClientErrorException e) {
+            model.addAttribute("errorMessage", e.getResponseBodyAsString());
+        }
         return "auction";
     }
 }

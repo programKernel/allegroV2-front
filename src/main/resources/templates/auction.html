@@ -12,6 +12,9 @@
         <div class="title" th:text="${auction.name}"></div>
         <div class="price" th:text="${#numbers.formatCurrency(auction.price)}"></div>
         <div class="description" th:text="${auction.description}"></div>
+        <form th:action="${'/buy/' + auction.id}" method="post">
+          <input type="submit" value="Buy Now">
+        </form>
       </div>
     </div>
   </body>

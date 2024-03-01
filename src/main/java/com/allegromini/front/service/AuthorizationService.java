@@ -27,11 +27,17 @@ public class AuthorizationService {
             throw new AuthorizationServiceException("You need to accept the Terms Of Service.");
         }
         restTemplate.postForEntity("http://localhost:8080/api/v1/accounts", accountDTO, String.class);
+        loginAccount(accountDTO);
     }
 
     public void loginAccount(AccountDTO accountDTO) {
         currentUser.setLogin(accountDTO.getEmail());
         currentUser.setPassword(accountDTO.getPassword());
+    }
+
+    public void logOut() {
+        currentUser.setLogin("");
+        currentUser.setPassword("");
     }
 
     public CurrentUser getCurrentUser() {

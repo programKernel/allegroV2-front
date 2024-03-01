@@ -40,7 +40,7 @@ public class AuctionMakerController {
                     .imageType(nameAndType[1])
                     .build();
             auctionService.addNewAuction(auctionDTO, file.getBytes());
-            model.addAttribute("auctionAddedMessage", "The auction has been added.");
+            model.addAttribute("successMessage", "The auction has been added.");
         } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());

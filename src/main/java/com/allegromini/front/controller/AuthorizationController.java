@@ -44,4 +44,11 @@ public class AuthorizationController {
             return "error";
         }
     }
+
+    @GetMapping("/logout")
+    public String getLogout(Model model) {
+        authorizationService.logOut();
+        model.addAttribute("successMessage", "You have logged out successfully.");
+        return "home";
+    }
 }

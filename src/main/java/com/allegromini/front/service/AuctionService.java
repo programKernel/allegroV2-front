@@ -22,9 +22,8 @@ import java.util.List;
 
 @Service
 public class AuctionService {
-    private AuthorizationService authorizationService;
-
     private RestTemplate restTemplate;
+    private AuthorizationService authorizationService;
 
     public AuctionService(RestTemplate restTemplate, AuthorizationService authorizationService) {
         this.restTemplate = restTemplate;
@@ -33,6 +32,8 @@ public class AuctionService {
     public void addNewAuction(AuctionDTO newAuctionDTO, byte[] bytes) {
         newAuctionDTO.setOwnerEmail(authorizationService.getCurrentUser().getLogin());
         HttpHeaders headers = new HttpHeaders();
+        String credentials = authorizationService.getCurrentUser().getLogin() + ":" + authorizationService.getCurrentUser().getPassword();
+        headers.add("Authorization","Basic " + Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8)));
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("auctionDTO", newAuctionDTO);
@@ -44,7 +45,12 @@ public class AuctionService {
         };
         body.add("image", fileResource);
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        restTemplate.postForEntity("http://localhost:8080/api/v1/auctions", requestEntity, String.class);
+        restTemplate.execute(
+                "http://localhost:8080/api/v1/auctions",
+                HttpMethod.POST,
+                restTemplate.httpEntityCallback(requestEntity),
+                restTemplate.responseEntityExtractor(String.class),
+                String.class);
     }
 
     public List<AuctionDTO> getAuctionResponseList() {
