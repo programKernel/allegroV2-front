@@ -1,6 +1,7 @@
 package com.allegromini.front.service;
 
 import com.allegromini.front.dto.AuctionDTO;
+import com.allegromini.front.dto.PurchaseDTO;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -20,6 +22,18 @@ public class BackendClient {
     public BackendClient(RestTemplate restTemplate, AuthorizationService authorizationService) {
         this.restTemplate = restTemplate;
         this.authorizationService = authorizationService;
+    }
+
+    public void buyProduct(int auctionId) {
+        PurchaseDTO purchaseDTO = new PurchaseDTO(authorizationService.getCurrentUser().getLogin(),auctionId);
+        System.out.println(purchaseDTO);
+        /*restTemplate.postForEntity("http://localhost:8080/api/v1/purchases", purchaseDTO, String.class);*/
+        restTemplate.execute(
+                "http://localhost:8080/api/v1/purchases",
+                HttpMethod.POST,
+                restTemplate.httpEntityCallback(builder().addPurchase(purchaseDTO).addCredentials().build()),
+                restTemplate.responseEntityExtractor(String.class),
+                String.class);
     }
 
     public List<AuctionDTO> getAuctions() {
@@ -44,7 +58,6 @@ public class BackendClient {
 
     public void addNewAuction(AuctionDTO newAuctionDTO, byte[] bytes) {
         newAuctionDTO.setOwnerEmail(authorizationService.getCurrentUser().getLogin());
-
         restTemplate.execute(
                 "http://localhost:8080/api/v1/auctions",
                 HttpMethod.POST,
@@ -73,7 +86,7 @@ public class BackendClient {
 
     class HttpEntityBuilder {
         private HttpHeaders headers = new HttpHeaders();
-        private MultiValueMap<String, Object> body = null;
+        private MultiValueMap<String, Object> map =  new LinkedMultiValueMap<>();
         HttpEntityBuilder addCredentials() {
             String credentials = authorizationService.getCurrentUser().getLogin() + ":" + authorizationService.getCurrentUser().getPassword();
             headers.add("Authorization", "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8)));
@@ -81,35 +94,37 @@ public class BackendClient {
         }
 
         HttpEntityBuilder addImage(byte[] bytes) {
-            prepareMultipartBody();
             ByteArrayResource fileResource = new ByteArrayResource(bytes) {
                 @Override
                 public String getFilename() {
                     return "exampleFileName.jpg"; // Ustaw nazwę pliku
                 }
             };
-            body.add("image", fileResource);
+            map.add("image", fileResource);
             return this;
         }
 
         HttpEntityBuilder addAuction(AuctionDTO auctionDTO){
-            prepareMultipartBody();
-            body.add("auctionDTO", auctionDTO);
+            map.add("auctionDTO", auctionDTO);
             return this;
         }
 
-        private void prepareMultipartBody() {
-            if (body == null) {
-                body = new LinkedMultiValueMap<>();
-            }
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntityBuilder addPurchase(PurchaseDTO purchaseDTO){
+            map.add("purchaseDTO", purchaseDTO);
+            return this;
         }
 
         HttpEntity<?> build() {
-            if (body != null) {
-                return new HttpEntity<>(body, headers);
+            if (map.isEmpty()) {
+                return new HttpEntity<>(headers);
             }
-            return new HttpEntity<>(headers);
+            if (map.size() == 1) {
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                return new HttpEntity<>(map.values().stream().findFirst().get(),headers);
+            } else {
+                headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+                return new HttpEntity<>(map, headers);
+            }
         }
     }
 }
